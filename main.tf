@@ -1,6 +1,6 @@
 locals {
   target_path = "clusters/${var.environment}/${var.cluster_name}"
-  key_name = "flux-${var.environment}-${var.cluster_name}"
+  key_name    = "flux-${var.environment}-${var.cluster_name}"
 }
 
 data "github_repository" "flux" {
@@ -14,7 +14,7 @@ data "flux_install" "main" {
 }
 
 data "flux_sync" "main" {
-  namespace      = var.namespace
+  namespace   = var.namespace
   target_path = local.target_path
   url         = "ssh://git@github.com/${data.github_repository.flux.full_name}.git"
   patch_names = keys(var.patches)
@@ -27,7 +27,7 @@ resource "tls_private_key" "main" {
 
 resource "kubernetes_namespace" "flux_system" {
   metadata {
-    name = data.flux_sync.main.namespace
+    name   = data.flux_sync.main.namespace
     labels = var.namespace_labels
   }
 

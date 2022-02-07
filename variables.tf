@@ -49,7 +49,7 @@ variable "cluster_domain" {
 
 variable "patches" {
   description = "The patches to be added to the flux kustomize manifest."
-  type = map(string)
+  type        = map(string)
   default     = {}
 }
 
