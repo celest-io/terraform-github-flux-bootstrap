@@ -17,34 +17,41 @@ variable "branch" {
 variable "sync_interval" {
   description = "Sync interval in minutes."
   type        = number
-
-  default = 1
+  default     = 1
 }
 
 variable "namespace" {
   description = "The namespace on which Flux will be installed."
   type        = string
-
-  default = "flux-system"
+  default     = "flux-system"
 }
 
 variable "namespace_labels" {
-  description = "kubernetes labels to be applied on the flux namespace."
+  description = "Kubernetes labels to be applied on the flux namespace."
   type        = map(string)
-
-  default = {}
+  default     = {}
 }
 
-variable "environment" {
-  type = string
+variable "target_path" {
+  description = "Relative path to the Git repository root where Flux manifests are committed."
+  type        = string
 }
 
-variable "cluster_name" {
-  type = string
+variable "key_name" {
+  description = "Name of the SSH key"
+  type        = string
 }
 
 variable "cluster_domain" {
-  type = string
+  description = "The internal cluster domain."
+  type        = string
+  default     = "cluster.local"
+}
+
+variable "image_pull_secrets" {
+  description = "Kubernetes secret name used for pulling the toolkit images from a private registry."
+  type        = string
+  default     = ""
 }
 
 variable "patches" {

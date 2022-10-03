@@ -1,22 +1,19 @@
-locals {
-  target_path = "clusters/${var.environment}/${var.cluster_name}"
-  key_name    = "flux-${var.environment}-${var.cluster_name}"
-}
-
 data "github_repository" "flux" {
   full_name = "${var.github_owner}/${var.repository_name}"
 }
 
 data "flux_install" "main" {
-  target_path    = local.target_path
-  cluster_domain = var.cluster_domain
-  namespace      = var.namespace
+  target_path        = var.target_path
+  cluster_domain     = var.cluster_domain
+  namespace          = var.namespace
+  image_pull_secrets = var.image_pull_secrets
 }
 
 data "flux_sync" "main" {
   namespace   = var.namespace
-  target_path = local.target_path
+  target_path = var.target_path
   url         = "ssh://git@github.com/${data.github_repository.flux.full_name}.git"
+  interval    = var.sync_interval
   patch_names = keys(var.patches)
 }
 
@@ -87,7 +84,7 @@ resource "kubernetes_secret" "main" {
 }
 
 resource "github_repository_deploy_key" "main" {
-  title      = local.key_name
+  title      = var.key_name
   repository = data.github_repository.flux.name
   key        = tls_private_key.main.public_key_openssh
   read_only  = true
